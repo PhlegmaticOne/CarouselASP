@@ -1,0 +1,40 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<link rel="stylesheet" href="~/css/index.css" />
+
+<div class="container">
+    <form method="post">
+        <input placeholder="Удаление по вводу" name="pattern"/>
+        <button type="submit" asp-page-handler="delete" value="Удалить"></button>
+    </form>
+    <div class="carousel" id="album_covers_carousel" data-bs-ride="carousel"></div>
+    <form enctype="multipart/form-data" method="POST" style="text-align: center">
+        <div><label>Группа/исполнитель</label><br /><input asp-for="FormAlbumImageModel.Artist" /><span asp-validation-for="FormAlbumImageModel.Artist"></span></div>
+        <div><label>Название альбома</label><br /><input asp-for="FormAlbumImageModel.AlbumName" /><span asp-validation-for="FormAlbumImageModel.AlbumName"></span></div>
+        <div>
+            <label>Добавить обложку</label><br /><input type="file" asp-for="FormAlbumImageModel.Image"/>
+            <span asp-validation-for="FormAlbumImageModel.Image"></span>
+        </div>
+        <input type="submit" value="Добавить" style="margin: 2rem"/>
+    </form>
+</div>
+
+
+@section Scripts{ 
+    <script src="~/js/carousel.js"></script>
+    <script>
+        const carouselCreator = new CarouselCreator("#album_covers_carousel", {
+            withControllers : true,
+            withCaption : true,
+            height : 500,
+            width: 500,
+            interval: 5000,
+            data : @Json.Serialize(Model.Images),
+        });
+        carouselCreator.Create().cycle();
+    </script>
+}
